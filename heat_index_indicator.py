@@ -121,6 +121,7 @@ def read_dht11_dat():
 
 def main():
     print "Raspberry Pi wiringPi DHT11 Temperature test program\n"
+    time_flag = False
     while True:
         result = read_dht11_dat()
         if result:
@@ -141,13 +142,36 @@ def main():
                 GPIO.output(LEDYELLOW,GPIO.HIGH)
                 GPIO.output(LEDRED,GPIO.LOW)
                 print('...LED YELLOW ON\n')
-            else:
+            elif heat_index < 83:
                 # red
                 GPIO.output(LEDGREEN,GPIO.LOW)
                 GPIO.output(LEDYELLOW,GPIO.LOW)
                 GPIO.output(LEDRED,GPIO.HIGH)
                 print('...LED RED ON\n')
+            else:
+                # red
+                GPIO.output(LEDGREEN,GPIO.LOW)
+                GPIO.output(LEDYELLOW,GPIO.LOW)
+		if time_flag:
+                	GPIO.output(LEDRED,GPIO.HIGH)
+		else:
+			GPIO.output(LEDRED,GPIO.LOW)
+                print('...LED RED CHIKACHIKA\n')
+	else:
+	    if heat_index >= 83:
+                # red
+                GPIO.output(LEDGREEN,GPIO.LOW)
+                GPIO.output(LEDYELLOW,GPIO.LOW)
+                if time_flag:
+                        GPIO.output(LEDRED,GPIO.HIGH)
+                else:
+                        GPIO.output(LEDRED,GPIO.LOW)
+                print('...LED RED CHIKACHIKA\n')
 
+	if time_flag:
+		time_flag = False
+	else:
+		time_flag = True
         time.sleep(1)
 
 def destroy():
